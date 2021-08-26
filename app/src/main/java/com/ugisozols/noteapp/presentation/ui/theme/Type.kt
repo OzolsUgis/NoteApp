@@ -1,4 +1,4 @@
-package com.ugisozols.noteapp.ui.theme
+package com.ugisozols.noteapp.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
