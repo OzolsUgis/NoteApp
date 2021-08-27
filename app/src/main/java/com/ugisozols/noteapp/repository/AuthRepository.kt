@@ -13,11 +13,14 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val noteAppApi: NoteAppApi
 ) {
-    suspend fun registerUser(email : String, password: String) = withContext(Dispatchers.IO){
+    suspend fun register(
+        email: String,
+        password: String
+    ): Resource<String> = withContext(Dispatchers.IO){
         try {
             val apiCallResponse = noteAppApi.register(AccountRequest(email, password))
             if(apiCallResponse.isSuccessful){
-                Resource.Success(apiCallResponse.body())
+                Resource.Success(apiCallResponse.body()?.message)
             }else{
                 Resource.Error(apiCallResponse.message(), null)
             }
