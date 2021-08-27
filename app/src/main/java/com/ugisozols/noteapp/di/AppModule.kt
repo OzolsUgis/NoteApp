@@ -41,6 +41,9 @@ object AppModule {
     @Provides
     fun provideNoteDao(database : NoteDatabase) = database.noteDao()
 
+    @Singleton
+    @Provides
+    fun provideBasicAuthInterceptor() = BasicAuthInterceptor()
 
     @Singleton
     @Provides
