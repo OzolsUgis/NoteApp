@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ugisozols.noteapp.presentation.ui.theme.BackgroundColor
 
 @Composable
 fun RegistrationScreen(
-    registerViewModel: RegisterScreenViewModel = viewModel()
+    registerViewModel: RegisterScreenViewModel = hiltViewModel()
 ) {
     Box(modifier = Modifier
         .background(color = BackgroundColor)
