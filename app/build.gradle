@@ -105,4 +105,11 @@ dependencies {
     def navigation_version = "2.4.0-alpha06"
     //noinspection GradleDependency
     implementation "androidx.navigation:navigation-compose:$navigation_version"
+
+    // LiveData
+    def lifecycle_version = "2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
+    //Compose
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 }
