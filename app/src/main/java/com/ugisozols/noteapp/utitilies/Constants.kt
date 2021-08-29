@@ -5,8 +5,9 @@ object Constants {
     val BASIC_AUTH_IGNORE_URLS = listOf("/login","/register")
 
     const val DATABASE_NAME = "notes_db"
-    const val BASE_URL = "http://10.0.2.2:8000"
+    const val BASE_URL = "http://0.0.0.0:8080"
     const val MIN_PASSWORD_LENGTH = 8
+
 
     // Errors
 
@@ -18,4 +19,7 @@ object Constants {
     // Routes
 
     const val REGISTER_SCREEN_ROUTE = "register"
+
+
+
 }
