@@ -15,7 +15,7 @@ class BasicAuthInterceptor : Interceptor {
         // add those end points in Ignore Urls constant and check if encoded
         // path is in those urls if it is then return request proceed
         val request = chain.request()
-        if(request.url.encodedPath in BASIC_AUTH_IGNORE_URLS){
+        if(request.url().encodedPath() in BASIC_AUTH_IGNORE_URLS){
             return chain.proceed(request)
         }
 
