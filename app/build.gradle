@@ -88,8 +88,14 @@ dependencies {
 
     //DaggerHilt
     def hilt_version = "2.38.1"
+    def hilt_compiler= "2.37"
+    def hilt_androidx = "1.0.0-alpha03"
+    def hilt_androidx_compiler = "1.0.0"
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_compiler"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_androidx"
+    kapt "androidx.hilt:hilt-compiler:$hilt_androidx_compiler"
+    implementation "androidx.hilt:hilt-navigation-compose:$hilt_androidx"
 
     //Timber
     def timber_version = "5.0.1"
