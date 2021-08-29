@@ -20,26 +20,45 @@ class RegisterScreenViewModel @Inject constructor(
     private val repository : AuthRepository
 ): ViewModel() {
 
-    private val _email = MutableLiveData<String>()
+    private val _email = MutableLiveData<String>("")
     val email : LiveData<String> = _email
 
+    fun onEmailChange(newEmail : String){
+        _email.value = newEmail
+    }
 
-    private val _password = MutableLiveData<String>()
+
+    private val _password = MutableLiveData<String>("")
     val password : LiveData<String> = _password
+
+    fun onPasswordChange(newPassword : String) {
+        _password.value = newPassword
+    }
+
+    private val _confirmedPassword = MutableLiveData<String>("")
+    val confirmedPassword : LiveData<String> = _confirmedPassword
+
+    fun onConfirmedPasswordChange(newConfirmedPassword : String) {
+        _confirmedPassword.value = newConfirmedPassword
+    }
+
 
     private val _register = MutableLiveData<Resource<String>>()
     val register :LiveData<Resource<String>> = _register
 
-    fun registerUser(email : String, password : String, reEnteredPassword : String){
+    fun registerUser(email : String, password : String, confirmedPassword : String){
         _register.postValue(Resource.Loading(null))
-        if(email.isEmpty()||password.isEmpty()||reEnteredPassword.isEmpty()){
+        if(email.isEmpty()||password.isEmpty()||confirmedPassword.isEmpty()){
             _register.postValue(Resource.Error(EMPTY_FIELD_ERROR))
+            return
         }
         if(password.length < MIN_PASSWORD_LENGTH){
-          _register.postValue(Resource.Error(TOO_SHORT_PASSWORD_ERROR))
+            _register.postValue(Resource.Error(TOO_SHORT_PASSWORD_ERROR))
+            return
         }
-        if(password != reEnteredPassword){
+        if(password != confirmedPassword){
             _register.postValue(Resource.Error(PASSWORDS_DO_NOT_MATCH_ERROR))
+            return
         }
         viewModelScope.launch {
             _register.postValue(repository.register(email,password))
