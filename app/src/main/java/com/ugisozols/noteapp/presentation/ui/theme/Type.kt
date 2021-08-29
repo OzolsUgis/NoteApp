@@ -21,6 +21,7 @@ val Typography = Typography(
     body1 = TextStyle(
         fontFamily = quicksand,
         fontWeight = FontWeight.Normal,
+        color = TextColor,
         fontSize = 16.sp
     ),
     h1 = TextStyle(
@@ -34,5 +35,6 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         color = TextColor,
-    )
+    ),
+
 )
