@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             NoteAppTheme {
                 val navController = rememberNavController()
-                val registerScreenViewModel : RegisterScreenViewModel by viewModels()
                 Surface(color = MaterialTheme.colors.background) {
                     Navigation(navController = navController)
                 }
