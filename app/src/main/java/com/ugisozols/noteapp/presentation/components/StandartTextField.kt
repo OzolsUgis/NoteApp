@@ -22,7 +22,6 @@ import com.ugisozols.noteapp.presentation.ui.theme.textfieldRaundedCorners
 
 @Composable
 fun StandardTextField(
-    modifier: Modifier = Modifier,
     hint : String = "",
     text : String = "",
     maxLength : Int = 50,
