@@ -2,36 +2,33 @@ package com.ugisozols.noteapp.presentation.registration
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
-import androidx.lifecycle.LiveData
 import com.ugisozols.noteapp.R
 import com.ugisozols.noteapp.presentation.components.StandardTextField
 import com.ugisozols.noteapp.presentation.ui.theme.*
+import com.ugisozols.noteapp.utitilies.Constants.EMPTY_FIELD_ERROR
+import com.ugisozols.noteapp.utitilies.Constants.PASSWORDS_DO_NOT_MATCH_ERROR
+import com.ugisozols.noteapp.utitilies.Constants.SERVER_CONNECTION_ERROR
+import com.ugisozols.noteapp.utitilies.Constants.TOO_SHORT_PASSWORD_ERROR
 import com.ugisozols.noteapp.utitilies.Resource
 import timber.log.Timber
+
 
 @Composable
 fun RegistrationScreen(
@@ -72,7 +69,11 @@ fun RegistrationSection(
     val email by viewModel.email.observeAsState(initial = "")
     val password by viewModel.password.observeAsState(initial = "")
     val confirmedPassword by viewModel.confirmedPassword.observeAsState(initial = "")
-    val registerState by viewModel.register.observeAsState(initial = Resource.Loading())
+    val registerState by viewModel.register.observeAsState(Resource.Loading())
+    var buttonIsClicked by remember {
+        mutableStateOf(false)
+    }
+
 
     Column(horizontalAlignment = Alignment.Start) {
         Text(
@@ -106,32 +107,24 @@ fun RegistrationSection(
                 viewModel.onConfirmedPasswordChange(newConfirmedPassword)
             })
         Spacer(modifier = Modifier.height(paddingMedium))
-        Button(
-            onClick = {
-                viewModel.registerUser(email, password, confirmedPassword)
-                Timber.d("this is from on click")
-                when(registerState){
-                    is Resource.Loading ->{
-                        Timber.d("this is from on click Loading state")
-                    }
-                    is Resource.Success ->{
-                        Timber.d("this is from on click success state")
-                    }
-                    is Resource.Error ->{
-                        Timber.d("this is from on click error state")
-                        Timber.d(registerState.message)
-                            Timber.d(password)
-                            Timber.d(confirmedPassword)
-                    }
-
-                }
-            },
-            modifier = Modifier
-                .align(Alignment.End),
-            shape = RoundedCornerShape(textfieldRaundedCorners)
-        ) {
-            Text(text = stringResource(id = R.string.register_button_title),color = ButtonTextColor)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End,verticalAlignment = Alignment.CenterVertically) {
+            if (buttonIsClicked){
+                RegisterState(registerState = registerState)
+            }
+            Spacer(modifier = Modifier.width(paddingMedium))
+            Button(
+                onClick = {
+                    viewModel.registerUser(email, password, confirmedPassword)
+                    buttonIsClicked = true
+                    Timber.d("this is from on click")
+                },
+                shape = RoundedCornerShape(textfieldRaundedCorners)
+            ) {
+                Text(text = stringResource(id = R.string.register_button_title),color = ButtonTextColor)
+            }
+      
         }
+
         Spacer(modifier = Modifier.height(100.dp))
         Text(
             modifier = Modifier.align(CenterHorizontally),
@@ -153,4 +146,79 @@ fun RegistrationSection(
 
     }
 
+}
+
+@Composable
+fun RegisterState( registerState : Resource<String>) {
+    val accountCreated = stringResource(id = R.string.register_account_created)
+    val unknownError = stringResource(id = R.string.register_unknown_error)
+    val usernameAlreadyExists = stringResource(id = R.string.register_username_exists)
+
+
+    when(registerState){
+        is Resource.Loading -> {
+            CircularProgressIndicator(
+                color = MainAccent,
+                strokeWidth = loadingProgressBarWidth,
+                modifier = Modifier
+                    .size(30.dp)
+                    .wrapContentSize()
+            )
+        }
+        is Resource.Success -> {
+            when(registerState.data.toString()){
+                accountCreated -> {
+                    // Here goes account created snackBar and redirect to login screen
+                }
+                unknownError ->{
+                    Text(
+                        text = registerState.data.toString(),
+                        color = ErrorColor,
+                        fontSize = errorFontSize
+                    )
+                }
+                usernameAlreadyExists ->{
+                    Text(
+                        text = registerState.data.toString(),
+                        color = ErrorColor,
+                        fontSize = errorFontSize
+                    )
+                }
+
+            }
+        }
+        is Resource.Error -> {
+            when(registerState.message.toString()){
+                SERVER_CONNECTION_ERROR -> {
+                    Text(
+                        text = registerState.message?: "This is null case",
+                        color = ErrorColor,
+                        fontSize = errorFontSize
+                    )
+                }
+                EMPTY_FIELD_ERROR -> {
+                    Text(
+                        text = registerState.message?: "This is null case",
+                        color = ErrorColor,
+                        fontSize = errorFontSize
+                    )
+                }
+                TOO_SHORT_PASSWORD_ERROR ->{
+                    Text(
+                        text = registerState.message?: "This is null case",
+                        color = ErrorColor,
+                        fontSize = errorFontSize
+                    )
+                }
+                PASSWORDS_DO_NOT_MATCH_ERROR ->{
+                    Text(
+                        text = registerState.message?: "This is null case",
+                        color = ErrorColor,
+                        fontSize = errorFontSize
+                    )
+                }
+            }
+        }
+
+    }
 }
