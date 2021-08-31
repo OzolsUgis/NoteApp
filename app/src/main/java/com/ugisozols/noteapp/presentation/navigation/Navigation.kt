@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ugisozols.noteapp.presentation.login.LoginScreen
 import com.ugisozols.noteapp.presentation.registration.RegistrationScreen
 import com.ugisozols.noteapp.utitilies.Screen
 
@@ -14,6 +15,8 @@ fun Navigation( navController : NavHostController) {
         composable(Screen.Register.route){
             RegistrationScreen()
         }
-
+        composable(Screen.Login.route) {
+            LoginScreen()
+        }
     }
 }
