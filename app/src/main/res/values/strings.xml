@@ -6,10 +6,11 @@
     <string name="register_confirmed_password_hint">Confirm password</string>
     <string name="register_button_title">Register</string>
     <string name="register_already_have_account">Already have an account !</string>
-    <string name="register_login">Log in !</string>
+    <string name="register_login">Sign In !</string>
     <string name="register_account_created">Account created</string>
     <string name="register_unknown_error">An unknown error occurred</string>
     <string name="register_username_exists">User with that email already exists</string>
+    <string name="register_successful">Account created, You can now log in!</string>
 
 
 </resources>
