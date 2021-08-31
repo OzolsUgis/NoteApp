@@ -20,6 +20,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
+import androidx.navigation.NavController
 import com.ugisozols.noteapp.R
 import com.ugisozols.noteapp.presentation.components.StandardTextField
 import com.ugisozols.noteapp.presentation.ui.theme.*
@@ -28,11 +29,13 @@ import com.ugisozols.noteapp.utitilies.Constants.PASSWORDS_DO_NOT_MATCH_ERROR
 import com.ugisozols.noteapp.utitilies.Constants.SERVER_CONNECTION_ERROR
 import com.ugisozols.noteapp.utitilies.Constants.TOO_SHORT_PASSWORD_ERROR
 import com.ugisozols.noteapp.utitilies.Resource
+import com.ugisozols.noteapp.utitilies.Screen
 import timber.log.Timber
 
 
 @Composable
 fun RegistrationScreen(
+    navController: NavController,
     registerViewModel: RegisterScreenViewModel = hiltViewModel()
 ) {
     Box(modifier = Modifier
@@ -55,7 +58,7 @@ fun RegistrationScreen(
                 contentDescription = "Notes Logo",
             )
             Spacer(modifier = Modifier.height(paddingLarge))
-            RegistrationSection(modifier = Modifier.fillMaxWidth(), viewModel = registerViewModel)
+            RegistrationSection(modifier = Modifier.fillMaxWidth(),navController = navController, viewModel = registerViewModel)
         }
     }
 
@@ -64,6 +67,7 @@ fun RegistrationScreen(
 @Composable
 fun RegistrationSection(
     modifier: Modifier = Modifier,
+    navController : NavController,
     viewModel: RegisterScreenViewModel,
 
 ) {
@@ -131,7 +135,7 @@ fun RegistrationSection(
             modifier = Modifier
                 .align(CenterHorizontally)
                 .clickable {
-
+                navController.navigate(Screen.Login.route)
             },
             text = buildAnnotatedString {
             append(stringResource(id = R.string.register_already_have_account))
