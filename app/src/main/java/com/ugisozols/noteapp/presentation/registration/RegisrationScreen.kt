@@ -2,6 +2,7 @@ package com.ugisozols.noteapp.presentation.registration
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -127,7 +128,11 @@ fun RegistrationSection(
 
         Spacer(modifier = Modifier.height(100.dp))
         Text(
-            modifier = Modifier.align(CenterHorizontally),
+            modifier = Modifier
+                .align(CenterHorizontally)
+                .clickable {
+
+            },
             text = buildAnnotatedString {
             append(stringResource(id = R.string.register_already_have_account))
             append(" ")
@@ -153,6 +158,7 @@ fun RegisterState( registerState : Resource<String>) {
     val accountCreated = stringResource(id = R.string.register_account_created)
     val unknownError = stringResource(id = R.string.register_unknown_error)
     val usernameAlreadyExists = stringResource(id = R.string.register_username_exists)
+    val registrationSuccessful = stringResource(id = R.string.register_successful)
 
 
     when(registerState){
@@ -169,6 +175,11 @@ fun RegisterState( registerState : Resource<String>) {
             when(registerState.data.toString()){
                 accountCreated -> {
                     // Here goes account created snackBar and redirect to login screen
+                    Text(
+                        text = registrationSuccessful,
+                        color = SuccessfulColor,
+                        fontSize = errorFontSize
+                    )
                 }
                 unknownError ->{
                     Text(
