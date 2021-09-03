@@ -11,12 +11,12 @@ import com.ugisozols.noteapp.utitilies.Screen
 
 @Composable
 fun Navigation( navController : NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Register.route){
+    NavHost(navController = navController, startDestination = Screen.Login.route){
         composable(Screen.Register.route){
             RegistrationScreen(navController)
         }
         composable(Screen.Login.route) {
-            LoginScreen()
+            LoginScreen(navController)
         }
     }
 }
