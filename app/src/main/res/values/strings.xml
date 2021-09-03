@@ -11,6 +11,9 @@
     <string name="register_unknown_error">An unknown error occurred</string>
     <string name="register_username_exists">User with that email already exists</string>
     <string name="register_successful">Account created, You can now log in!</string>
-
-
+    <string name="login_title">Login</string>
+    <string name="login_button_title">Login</string>
+    <string name="create_account">Create Account!</string>
+    <string name="login_incorrect_credentials">Email or password incorrect</string>
+    <string name="login_passed">You are now logged in</string>
 </resources>
