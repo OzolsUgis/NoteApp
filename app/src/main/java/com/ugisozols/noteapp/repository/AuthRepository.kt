@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.lang.Exception
+import java.sql.Time
 import javax.inject.Inject
 
 
@@ -22,6 +23,25 @@ class AuthRepository @Inject constructor(
         delay(1000L)
         try {
             val apiCallResponse = noteAppApi.register(AccountRequest(email, password))
+            if(apiCallResponse.isSuccessful){
+                Resource.Success(apiCallResponse.body()?.message)
+            }else{
+                Resource.Error(apiCallResponse.message(), null)
+            }
+        }catch (e : Exception){
+            Timber.d(e)
+            Resource.Error(SERVER_CONNECTION_ERROR, null)
+        }
+    }
+
+    suspend fun login(
+        email: String,
+        password: String
+    ) : Resource<String> = withContext(Dispatchers.IO){
+        delay(1000L)
+
+        try {
+            val apiCallResponse = noteAppApi.login(AccountRequest(email, password))
             if(apiCallResponse.isSuccessful){
                 Resource.Success(apiCallResponse.body()?.message)
             }else{
