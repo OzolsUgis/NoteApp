@@ -6,6 +6,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.ugisozols.noteapp.data.local.entities.DeletedNotesInDatabase
 import com.ugisozols.noteapp.data.local.entities.Notes
 import kotlinx.coroutines.flow.Flow
 
@@ -36,5 +37,12 @@ interface NoteDao {
     @Query("SELECT * FROM notes ORDER BY date DESC")
     fun getAllNotes(): Flow<List<Notes>>
 
+    @Query("SELECT * FROM deleted_note_ids")
+    suspend fun getAllDeletedInDatabaseNoteIds() : List<DeletedNotesInDatabase>
 
+    @Query("DELETE FROM deleted_note_ids WHERE deletedNoteId = :deletedNoteId")
+    suspend fun deleteDeletedInDatabaseNoteIds(deletedNoteId : String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDeletedInDatabaseNoteId(deletedNoteId: DeletedNotesInDatabase)
 }
