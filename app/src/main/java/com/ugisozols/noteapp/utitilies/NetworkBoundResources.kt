@@ -4,15 +4,14 @@ package com.ugisozols.noteapp.utitilies
 import com.ugisozols.noteapp.utitilies.Constants.SERVER_CONNECTION_ERROR
 import kotlinx.coroutines.flow.*
 
-inline fun <ResultType,RequestType> networkBoundResources(
+inline fun <DatabaseData,ApiResponse> networkBoundResources(
 
-    crossinline query: () -> Flow<ResultType>,
-    crossinline fetch: suspend () -> RequestType,
-    crossinline  saveFetchResultToDatabase : suspend (RequestType) -> Unit,
+    crossinline query: () -> Flow<DatabaseData>,
+    crossinline fetch: suspend () -> ApiResponse,
+    crossinline  saveFetchResultToDatabase : suspend (ApiResponse) -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = {},
-    crossinline shouldFetch: (ResultType) -> Boolean = {true}
+    crossinline shouldFetch: (DatabaseData) -> Boolean = {true}
 ) = flow{
-
     emit(Resource.Loading(null))
 
     val data = query().first()
