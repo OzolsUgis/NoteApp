@@ -54,6 +54,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
             Spacer(modifier = Modifier.height(paddingLarge))
             Spacer(modifier = Modifier.height(paddingLarge))
             CreateAccount(navController = navController)
+            Spacer(modifier = Modifier.height(200.dp))
         }
 
     }
