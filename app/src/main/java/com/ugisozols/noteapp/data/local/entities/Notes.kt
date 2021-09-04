@@ -13,7 +13,7 @@ data class Notes(
     val content : String,
     val userEmail : String,
     @Expose(deserialize = false, serialize = false)
-    val isSyncedToServer : Boolean,
+    var isSyncedToServer : Boolean,
     @PrimaryKey
     val id : String = UUID.randomUUID().toString()
 )
