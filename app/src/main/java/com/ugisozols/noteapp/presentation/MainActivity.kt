@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.ugisozols.noteapp.presentation.navigation.Navigation
+import com.ugisozols.noteapp.presentation.notes.NoteScreen
 import com.ugisozols.noteapp.presentation.registration.RegisterScreenViewModel
 import com.ugisozols.noteapp.presentation.ui.theme.NoteAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +23,8 @@ class MainActivity : ComponentActivity() {
             NoteAppTheme {
                 val navController = rememberNavController()
                 Surface(color = MaterialTheme.colors.background) {
-                    Navigation(navController = navController)
+                    //Navigation(navController = navController)
+                    NoteScreen()
                 }
             }
         }
