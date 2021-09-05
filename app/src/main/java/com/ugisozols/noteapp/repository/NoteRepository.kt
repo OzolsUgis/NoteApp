@@ -11,6 +11,7 @@ import com.ugisozols.noteapp.utitilies.checkInternetConnectivity
 import com.ugisozols.noteapp.utitilies.networkBoundResources
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
+import timber.log.Timber
 
 import javax.inject.Inject
 
@@ -40,39 +41,46 @@ class NoteRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteNoteById(noteId: String){
-        val deleteNote = try {
-            noteAppApi.deleteNote(DeleteNoteRequest(noteId))
-        }catch (e: Exception){
-            null
-        }
-        noteDao.deleteNoteById(noteId)
-        if(deleteNote == null || !deleteNote.isSuccessful){
-            noteDao.insertDeletedInDatabaseNoteId(DeletedNotesInDatabase(noteId))
-        }else{
-            deleteDeletedInDatabaseNoteIds(noteId)
-        }
-        }
-    suspend fun deleteDeletedInDatabaseNoteIds(noteId : String){
-        noteDao.deleteDeletedInDatabaseNoteIds(noteId)
-    }
+//    suspend fun deleteNoteById(noteId: String){
+//        val deleteNote = try {
+//            noteAppApi.deleteNote(DeleteNoteRequest(noteId))
+//        }catch (e: Exception){
+//            null
+//        }
+//        noteDao.deleteNoteById(noteId)
+//        if(deleteNote == null || !deleteNote.isSuccessful){
+//            noteDao.insertDeletedInDatabaseNoteId(DeletedNotesInDatabase(noteId))
+//        }else{
+//            deleteDeletedInDatabaseNoteIds(noteId)
+//        }
+//        }
+//    suspend fun deleteDeletedInDatabaseNoteIds(noteId : String){
+//        noteDao.deleteDeletedInDatabaseNoteIds(noteId)
+//    }
 
     suspend fun getNoteById(noteId : String) = noteDao.deleteNoteById(noteId)
 
     fun getAllNotes() : Flow<Resource<out List<Notes>>> {
         return networkBoundResources(
             query = {
+                Timber.d("This is from query")
                 noteDao.getAllNotes()
             },
             fetch = {
+
+                Timber.d("This is from fetching")
                 noteAppApi.getNotes()
             },
             saveFetchResultToDatabase = { response ->
+
+                Timber.d("This is from save fetch result to database ")
                 response.body()?.let {
-                    // TODO: insert notes in database
+                    insertAllNotes(it)
                 }
             },
             shouldFetch = {
+
+                Timber.d("internet checker passed")
                 checkInternetConnectivity(context = context)
             }
         )
