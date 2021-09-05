@@ -6,9 +6,10 @@ import com.google.gson.annotations.Expose
 import java.util.*
 
 @Entity(tableName = "folders")
+// TODO: add type converters to convert List<Notes>
 data class Folders(
     val folderName : String,
-    val notes : List<Notes>? = null,
+    //val notes : List<Notes>? = null,
     val userEmail : String,
     @Expose(deserialize = false, serialize = false)
     val isSyncedToServer : Boolean,
