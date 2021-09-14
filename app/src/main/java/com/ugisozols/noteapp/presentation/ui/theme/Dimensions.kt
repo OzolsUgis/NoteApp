@@ -10,3 +10,4 @@ val paddingLarge = 24.dp
 val textfieldRaundedCorners = 15.dp
 val loadingProgressBarWidth = 3.dp
 val errorFontSize = 14.sp
+val navigationItemFontSize = 10.sp
