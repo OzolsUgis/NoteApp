@@ -16,4 +16,6 @@
     <string name="create_account">Create Account!</string>
     <string name="login_incorrect_credentials">Email or password incorrect</string>
     <string name="login_passed">You are now logged in</string>
+    <string name="nav_notes_title">Notes</string>
+    <string name="nav_folders_title">Folders</string>
 </resources>
