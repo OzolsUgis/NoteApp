@@ -20,6 +20,7 @@ object Constants {
 
     const val REGISTER_SCREEN_ROUTE = "register"
     const val LOGIN_SCREEN_ROUTE = "login"
+    const val NOTES_SCREEN_ROUTE = "notes"
 
 
 
