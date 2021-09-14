@@ -23,8 +23,8 @@ class MainActivity : ComponentActivity() {
             NoteAppTheme {
                 val navController = rememberNavController()
                 Surface(color = MaterialTheme.colors.background) {
-                    //Navigation(navController = navController)
-                    NoteScreen()
+                    Navigation(navController = navController)
+
                 }
             }
         }
