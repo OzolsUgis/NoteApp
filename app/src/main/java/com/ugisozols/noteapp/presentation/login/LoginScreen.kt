@@ -28,17 +28,27 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ugisozols.noteapp.R
+import com.ugisozols.noteapp.data.remote.BasicAuthInterceptor
 import com.ugisozols.noteapp.presentation.components.StandardTextField
 import com.ugisozols.noteapp.presentation.registration.RegisterState
 import com.ugisozols.noteapp.presentation.ui.theme.*
 import com.ugisozols.noteapp.utitilies.Constants
 import com.ugisozols.noteapp.utitilies.Constants.EMPTY_FIELD_ERROR
+import com.ugisozols.noteapp.utitilies.Constants.NOTES_SCREEN_ROUTE
 import com.ugisozols.noteapp.utitilies.Resource
 import com.ugisozols.noteapp.utitilies.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
-fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel(),
+    basicAuthInterceptor: BasicAuthInterceptor
+) {
     val logo = painterResource(id = R.drawable.ic_sticky_notes)
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
         Column(
@@ -50,7 +60,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
         ) {
             LogoSection(logo = logo, modifier = Modifier.size(220.dp))
             Spacer(modifier = Modifier.height(paddingLarge))
-            LoginInputSection(viewModel)
+            LoginInputSection(viewModel, basicAuthInterceptor, navController)
             Spacer(modifier = Modifier.height(paddingLarge))
             Spacer(modifier = Modifier.height(paddingLarge))
             CreateAccount(navController = navController)
@@ -61,7 +71,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
 }
 
 @Composable
-fun LoginInputSection(viewModel: LoginViewModel) {
+fun LoginInputSection(viewModel: LoginViewModel,basicAuthInterceptor: BasicAuthInterceptor,navController: NavController) {
     val email by viewModel.email.observeAsState("")
     val password by viewModel.password.observeAsState("")
     val loginState by viewModel.login.observeAsState(Resource.Loading())
@@ -101,17 +111,25 @@ fun LoginInputSection(viewModel: LoginViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (buttonIsClicked){
-                LoginState(loginState = loginState )
+                LoginState(loginState = loginState, navController)
             }
+            CoroutineScope(Dispatchers.Main).launch{
+                delay(1500L)
+                buttonIsClicked = false
+            }
+
             Spacer(modifier = Modifier.width(paddingMedium))
             Button(
                 onClick = {
                     viewModel.login(email, password)
+                    authenticate(basicAuthInterceptor, email, password)
                     buttonIsClicked = true
                     Timber.d("this is from on click")
+
                 },
                 shape = RoundedCornerShape(textfieldRaundedCorners)
             ) {
+
                 Text(text = stringResource(id = R.string.login_button_title),color = ButtonTextColor)
             }
 
@@ -119,25 +137,31 @@ fun LoginInputSection(viewModel: LoginViewModel) {
     }
 }
 
+
+fun authenticate(basicAuthInterceptor: BasicAuthInterceptor, email : String, password: String){
+    basicAuthInterceptor.email = email
+    basicAuthInterceptor.password = password
+}
+
 @Composable
-fun LoginState(loginState : Resource<String>) {
-    val incorrectCredentials = stringResource(id = R.string.login_incorrect_credentials)
-    val loginPassed = stringResource(id = R.string.login_passed)
-    when(loginState){
-        is Resource.Loading->{
-            Timber.d("This is loading state ")
-            CircularProgressIndicator(
-                color = MainAccent,
-                strokeWidth = loadingProgressBarWidth,
-                modifier = Modifier
-                    .size(30.dp)
-                    .wrapContentSize()
-            )
-        }
-         is Resource.Success->{
-             Timber.d("This is success state ")
-                when(loginState.data.toString()){
-                    incorrectCredentials ->{
+fun LoginState(loginState : Resource<String>, navController: NavController){
+        val incorrectCredentials = stringResource(id = R.string.login_incorrect_credentials)
+        val loginPassed = stringResource(id = R.string.login_passed)
+        when (loginState) {
+            is Resource.Loading -> {
+                Timber.d("This is loading state ")
+                CircularProgressIndicator(
+                    color = MainAccent,
+                    strokeWidth = loadingProgressBarWidth,
+                    modifier = Modifier
+                        .size(30.dp)
+                        .wrapContentSize()
+                )
+            }
+            is Resource.Success -> {
+                Timber.d("This is success state ")
+                when (loginState.data.toString()) {
+                    incorrectCredentials -> {
                         Text(
                             text = loginState.data.toString(),
                             color = ErrorColor,
@@ -145,27 +169,28 @@ fun LoginState(loginState : Resource<String>) {
                         )
                     }
                     loginPassed -> {
-                        // Passes navigation route to home route
+                        navController.navigate(NOTES_SCREEN_ROUTE)
                         Timber.d("Login Successful")
+                        // Passes navigation route to home route
+
                     }
                 }
-         }
-        is Resource.Error->{
-            Timber.d("This is error state ")
-            when(loginState.message){
-                EMPTY_FIELD_ERROR ->{
-                    Text(
-                        text = loginState.message?: "This is null case",
-                        color = ErrorColor,
-                        fontSize = errorFontSize
-                    )
+            }
+            is Resource.Error -> {
+                Timber.d("This is error state ")
+                when (loginState.message) {
+                    EMPTY_FIELD_ERROR -> {
+                        Text(
+                            text = loginState.message ?: "This is null case",
+                            color = ErrorColor,
+                            fontSize = errorFontSize
+                        )
+                    }
                 }
+
             }
 
         }
-
-
-    }
 }
 
 @Composable
