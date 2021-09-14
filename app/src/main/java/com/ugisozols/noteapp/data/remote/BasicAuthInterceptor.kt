@@ -7,8 +7,8 @@ import okhttp3.Response
 
 class BasicAuthInterceptor : Interceptor {
 
-    private val email : String? = null
-    private val password : String? = null
+    var email : String? = null
+    var password : String? = null
 
     override fun intercept(chain: Interceptor.Chain): Response {
         // Because we don't need authentication for /login and / register we
@@ -21,7 +21,7 @@ class BasicAuthInterceptor : Interceptor {
 
         val authenticatedRequest = request.newBuilder()
                 .addHeader("Authorization",
-                Credentials.basic(email?:"", password?:"")
+                Credentials.basic(email?:"test", password?:"12345")
             ).build()
         return chain.proceed(authenticatedRequest)
     }
