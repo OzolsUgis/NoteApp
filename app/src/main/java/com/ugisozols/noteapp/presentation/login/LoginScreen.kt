@@ -9,13 +9,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -113,10 +108,6 @@ fun LoginInputSection(viewModel: LoginViewModel,basicAuthInterceptor: BasicAuthI
             if (buttonIsClicked){
                 LoginState(loginState = loginState, navController)
             }
-            CoroutineScope(Dispatchers.Main).launch{
-                delay(1500L)
-                buttonIsClicked = false
-            }
 
             Spacer(modifier = Modifier.width(paddingMedium))
             Button(
@@ -169,8 +160,11 @@ fun LoginState(loginState : Resource<String>, navController: NavController){
                         )
                     }
                     loginPassed -> {
-                        navController.navigate(NOTES_SCREEN_ROUTE)
-                        Timber.d("Login Successful")
+                        LaunchedEffect(Unit ){
+                            navController.navigate(NOTES_SCREEN_ROUTE)
+                            Timber.d("Login Successful")
+                        }
+
                         // Passes navigation route to home route
 
                     }
