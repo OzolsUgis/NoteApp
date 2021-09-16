@@ -41,9 +41,10 @@ import timber.log.Timber
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel(),
-    basicAuthInterceptor: BasicAuthInterceptor
+    viewModel: LoginViewModel = hiltViewModel()
+
 ) {
+
     val logo = painterResource(id = R.drawable.ic_sticky_notes)
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
         Column(
@@ -53,9 +54,9 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(horizontal = paddingMedium)
         ) {
-            LogoSection(logo = logo, modifier = Modifier.size(220.dp))
+            LogoSection(logo = logo, modifier = Modifier.size(logoSize))
             Spacer(modifier = Modifier.height(paddingLarge))
-            LoginInputSection(viewModel, basicAuthInterceptor, navController)
+            LoginInputSection(viewModel, navController)
             Spacer(modifier = Modifier.height(paddingLarge))
             Spacer(modifier = Modifier.height(paddingLarge))
             CreateAccount(navController = navController)
@@ -66,7 +67,7 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginInputSection(viewModel: LoginViewModel,basicAuthInterceptor: BasicAuthInterceptor,navController: NavController) {
+fun LoginInputSection(viewModel: LoginViewModel,navController: NavController) {
     val email by viewModel.email.observeAsState("")
     val password by viewModel.password.observeAsState("")
     val loginState by viewModel.login.observeAsState(Resource.Loading())
@@ -106,14 +107,19 @@ fun LoginInputSection(viewModel: LoginViewModel,basicAuthInterceptor: BasicAuthI
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (buttonIsClicked){
+
                 LoginState(loginState = loginState, navController)
             }
+
 
             Spacer(modifier = Modifier.width(paddingMedium))
             Button(
                 onClick = {
                     viewModel.login(email, password)
-                    authenticate(basicAuthInterceptor, email, password)
+                    viewModel.authenticate(email,password)
+                    Timber.d(email)
+                    Timber.d(password)
+
                     buttonIsClicked = true
                     Timber.d("this is from on click")
 
@@ -129,10 +135,6 @@ fun LoginInputSection(viewModel: LoginViewModel,basicAuthInterceptor: BasicAuthI
 }
 
 
-fun authenticate(basicAuthInterceptor: BasicAuthInterceptor, email : String, password: String){
-    basicAuthInterceptor.email = email
-    basicAuthInterceptor.password = password
-}
 
 @Composable
 fun LoginState(loginState : Resource<String>, navController: NavController){
@@ -160,6 +162,7 @@ fun LoginState(loginState : Resource<String>, navController: NavController){
                         )
                     }
                     loginPassed -> {
+
                         LaunchedEffect(Unit ){
                             navController.navigate(NOTES_SCREEN_ROUTE)
                             Timber.d("Login Successful")
@@ -175,7 +178,7 @@ fun LoginState(loginState : Resource<String>, navController: NavController){
                 when (loginState.message) {
                     EMPTY_FIELD_ERROR -> {
                         Text(
-                            text = loginState.message ?: "This is null case",
+                            text = loginState.message,
                             color = ErrorColor,
                             fontSize = errorFontSize
                         )

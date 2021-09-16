@@ -58,7 +58,7 @@ fun RegistrationScreen(
                 contentDescription = "Notes Logo",
             )
             Spacer(modifier = Modifier.height(paddingLarge))
-            RegistrationSection(modifier = Modifier.fillMaxWidth(),navController = navController, viewModel = registerViewModel)
+            RegistrationSection(navController = navController, viewModel = registerViewModel)
         }
     }
 
@@ -66,7 +66,6 @@ fun RegistrationScreen(
 
 @Composable
 fun RegistrationSection(
-    modifier: Modifier = Modifier,
     navController : NavController,
     viewModel: RegisterScreenViewModel,
 
