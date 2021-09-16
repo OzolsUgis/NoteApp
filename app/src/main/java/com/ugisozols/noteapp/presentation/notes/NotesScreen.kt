@@ -1,74 +1,147 @@
 package com.ugisozols.noteapp.presentation.notes
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
+
+import android.widget.Space
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.ugisozols.noteapp.R
 import com.ugisozols.noteapp.data.local.entities.Notes
 import com.ugisozols.noteapp.presentation.components.BottomNavBar
-import com.ugisozols.noteapp.presentation.navigation.Navigation
-import com.ugisozols.noteapp.presentation.ui.theme.MainAccent
-import com.ugisozols.noteapp.presentation.ui.theme.loadingProgressBarWidth
-import com.ugisozols.noteapp.utitilies.Constants
-import com.ugisozols.noteapp.utitilies.Constants.LOGIN_SCREEN_ROUTE
+import com.ugisozols.noteapp.presentation.ui.theme.*
 import com.ugisozols.noteapp.utitilies.Constants.NOTES_SCREEN_ROUTE
 import com.ugisozols.noteapp.utitilies.Constants.REGISTER_SCREEN_ROUTE
 import com.ugisozols.noteapp.utitilies.NavBarItem
 import com.ugisozols.noteapp.utitilies.Resource
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.toList
+import com.ugisozols.noteapp.utitilies.Screen
 import timber.log.Timber
 
 @Composable
 fun NoteScreen(
+    navController : NavController,
     viewModel: NotesViewModel = hiltViewModel()
 ) {
-    ShowNotes(viewModel = viewModel)
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.wrapContentSize(),
         contentAlignment = Alignment.BottomStart
     ) {
-        val navController = rememberNavController()
-            BottomNavBar(
-                items = listOf(
-                    NavBarItem(
-                        title = stringResource(id = R.string.nav_notes_title),
-                        icon = Icons.Default.Favorite,
-                        route = NOTES_SCREEN_ROUTE
-                    ),
-                    NavBarItem(
-                        title = stringResource(id = R.string.nav_notes_title),
-                        icon = Icons.Default.Favorite,
-                        route = REGISTER_SCREEN_ROUTE
-                    )
-                ),
-                navController = navController,
-                onItemClick = {
-                    navController.navigate(it.route)
+        Column() {
+            TopBar(navController = navController)
+            Headline()
+            Spacer(modifier = Modifier.height(paddingLarge))
+            Box(
+                modifier =Modifier.fillMaxSize(),
+                contentAlignment = Alignment.TopStart
+            ){
+                Scaffold(
+                    modifier = Modifier.padding(bottom =fabLiftHeight),
+                    floatingActionButtonPosition = FabPosition.End,
+                    floatingActionButton = {
+                            FloatingActionButton(backgroundColor = MainAccent,contentColor = SurfaceColor,onClick = {
+                                // TODO add new note page navigation
+                            }) {
+                                Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                        }
+
+                    }){
+                    ShowNotes(viewModel = viewModel)
                 }
-            )
+            }
+
+
         }
+            BottomNavigationBar(navController = navController)
+
+
+
+    }
 
 
 }
+
+@Composable
+fun Headline() {
+    Text(
+        modifier = Modifier . padding(start = paddingMedium),
+        text = stringResource(id = R.string.all_notes),
+        style = MaterialTheme.typography.h1
+    )
+}
+@Composable
+fun TopBar(navController: NavController) {
+
+    TopAppBar(
+        backgroundColor = BackgroundColor,
+        contentColor = MainAccent,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    end = paddingMedium
+                )
+        ) {
+            Icon(
+                imageVector = Icons.Default.ExitToApp,
+                contentDescription = "LogOut",
+                modifier = Modifier
+                    .size(30.dp)
+                    .clickable {
+                        navController.navigate(Screen.Login.route)
+                    }
+            )
+        }
+
+    }
+}
+
+@Composable
+fun BottomNavigationBar(navController: NavController) {
+    BottomNavBar(
+        items = listOf(
+            NavBarItem(
+                title = stringResource(id = R.string.nav_notes_title),
+                icon = painterResource(id = R.drawable.ic_note_writing),
+                route = NOTES_SCREEN_ROUTE
+            ),
+            NavBarItem(
+                title = stringResource(id = R.string.nav_folders_title),
+                icon = painterResource(id = R.drawable.ic_folder_icon),
+                route = REGISTER_SCREEN_ROUTE
+            )
+        ),
+        navController = navController,
+        onItemClick = {
+            navController.navigate(it.route)
+        }
+    )
+}
+
+
 
 
 
@@ -77,14 +150,14 @@ fun NoteScreen(
         viewModel: NotesViewModel
     ) {
         val notesDataState = viewModel.notes.observeAsState()
-        val listIsEmpty = notesDataState.value?.data?.isEmpty() ?: return Unit
+        val listIsEmpty = notesDataState.value?.data?.isEmpty() ?: return
         when (notesDataState.value) {
             is Resource.Loading -> {
                 CircularProgressIndicator(
                     color = MainAccent,
                     strokeWidth = loadingProgressBarWidth,
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(progressIndicator)
                         .wrapContentSize()
                 )
             }
@@ -92,7 +165,8 @@ fun NoteScreen(
                 if (listIsEmpty) {
                     EmptyState()
                 } else {
-                    Text(text = "There are ${notesDataState.value?.data?.lastIndex.toString()} notes")
+                    val list = notesDataState.value?.data?.toList()
+                    SuccessfullyLoadedNotes(note = list)
                 }
             }
             is Resource.Error -> {
@@ -104,18 +178,79 @@ fun NoteScreen(
 
 
     @Composable
-    fun EmptyState() {
-        Text(text = "This is when empty list")
+    private fun EmptyState() {
+        Box(contentAlignment = Alignment.Center,modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                paddingLarge
+            )){
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(modifier = Modifier.size(logoSize),painter = painterResource(id = R.drawable.ic_sticky_notes) , contentDescription = null)
+                Spacer(modifier = Modifier.height(paddingLarge))
+                Text(textAlign = TextAlign.Center,text = stringResource(id = R.string.welcome_to_notes))
+                Spacer(Modifier.height(emptyNotesWelcomeBottomSpacer))
+            }
+        }
     }
 
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun NotEmptyState() {
-        Text(text = "This is when there are some list items")
-    }
+    private fun SuccessfullyLoadedNotes(note : List<Notes>?) {
+        val notes = note.orEmpty()
+        Timber.d(notes.size.toString())
+        LazyVerticalGrid(cells = GridCells.Adaptive(gridCellsWidth)){
+            items(notes){
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(paddingSmall)) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(noteCardHeight)
+                            .padding()
+                            .clickable {
+                                // Here goes navigation to note details
+                            }
+                        ,
+                        shape = RoundedCornerShape(cardRoundedCorners),
+                        backgroundColor = SurfaceColor
+                    ) {
+                        Column() {
+                            Text(modifier = Modifier.padding(
+                                top = paddingMedium,
+                                start = paddingMedium
+                            ),text = it.title, style = MaterialTheme.typography.body1)
+                            Text(modifier = Modifier.padding(
+                                top = paddingSmall,
+                                start = paddingMedium,
+                                bottom = paddingLarge,
+                                end = paddingSmall
+                            ), text = it.content, fontWeight = FontWeight.Normal)
+                        }
+
+                    }
+                    Spacer(modifier = Modifier.width(paddingSmall))
+                }
+                }
+            }
+        }
 
 
+
     @Composable
-    fun ErrorState() {
-        Text(text = "This is when Error state ")
+    private fun ErrorState() {
+        Box(contentAlignment = Alignment.Center,modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                paddingLarge
+            )){
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(modifier = Modifier.size(logoSize),painter = painterResource(id = R.drawable.ic_sticky_notes) , contentDescription = null)
+                Spacer(modifier = Modifier.height(paddingLarge))
+                Text(textAlign = TextAlign.Center,text = stringResource(id = R.string.register_unknown_error),color = Color.Red)
+                Spacer(Modifier.height(emptyNotesWelcomeBottomSpacer))
+            }
+        }
     }
