@@ -18,4 +18,6 @@
     <string name="login_passed">You are now logged in</string>
     <string name="nav_notes_title">Notes</string>
     <string name="nav_folders_title">Folders</string>
+    <string name="all_notes">All Notes</string>
+    <string name="welcome_to_notes">Welcome to NoteApp, here you can write your daily notes, to start press Add button</string>
 </resources>
