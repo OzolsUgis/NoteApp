@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ugisozols.noteapp.data.remote.BasicAuthInterceptor
 import com.ugisozols.noteapp.repository.AuthRepository
 import com.ugisozols.noteapp.utitilies.Constants
 import com.ugisozols.noteapp.utitilies.Constants.EMPTY_FIELD_ERROR
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val authInterceptor: BasicAuthInterceptor
 ): ViewModel() {
 
 
@@ -31,6 +33,11 @@ class LoginViewModel @Inject constructor(
 
     fun onPasswordChange(newPassword: String){
         _password.value = newPassword
+    }
+
+    fun authenticate(email: String, password: String){
+        authInterceptor.email = email
+        authInterceptor.password = password
     }
 
     private val _login = MutableLiveData<Resource<String>>()
