@@ -1,22 +1,21 @@
 package com.ugisozols.noteapp.presentation.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.ugisozols.noteapp.presentation.ui.theme.MainAccent
-import com.ugisozols.noteapp.presentation.ui.theme.SurfaceColor
-import com.ugisozols.noteapp.presentation.ui.theme.UnselectedColor
-import com.ugisozols.noteapp.presentation.ui.theme.navigationItemFontSize
+import com.ugisozols.noteapp.presentation.ui.theme.*
 import com.ugisozols.noteapp.utitilies.NavBarItem
 
 
@@ -30,7 +29,8 @@ fun BottomNavBar(
     val backstack = navController.currentBackStackEntryAsState()
     BottomNavigation(
         modifier = modifier,
-        backgroundColor = SurfaceColor
+        backgroundColor = SurfaceColor,
+
     ) {
         items.forEach { item ->
             val selected = item.route == backstack.value?.destination?.route
@@ -38,10 +38,17 @@ fun BottomNavBar(
                 selected = selected,
                 selectedContentColor = MainAccent,
                 unselectedContentColor = UnselectedColor,
-                onClick = {},
+                onClick = {
+                          onItemClick(item)
+                },
                 icon = {
                     Column(horizontalAlignment = CenterHorizontally) {
-                        Icon(imageVector = item.icon, contentDescription = item.title)
+                        Icon(
+                            painter = item.icon,
+                            contentDescription = item.title,
+                            modifier = Modifier.size(navigationIconSize)
+                        )
+                        Spacer(Modifier.height(5.dp))
                         Text(
                             text = item.title,
                             textAlign = TextAlign.Center,
