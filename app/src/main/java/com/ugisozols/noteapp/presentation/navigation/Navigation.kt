@@ -19,10 +19,10 @@ fun Navigation( navController : NavHostController) {
             RegistrationScreen(navController)
         }
         composable(Screen.Login.route) {
-            LoginScreen(navController, basicAuthInterceptor = BasicAuthInterceptor())
+            LoginScreen(navController)
         }
         composable(Screen.Notes.route){
-            NoteScreen(hiltViewModel())
+            NoteScreen(navController)
         }
 
     }
