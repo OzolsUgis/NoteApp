@@ -4,6 +4,7 @@ import com.ugisozols.noteapp.utitilies.Constants.BASIC_AUTH_IGNORE_URLS
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.Response
+import timber.log.Timber
 
 class BasicAuthInterceptor : Interceptor {
 
@@ -21,7 +22,7 @@ class BasicAuthInterceptor : Interceptor {
 
         val authenticatedRequest = request.newBuilder()
                 .addHeader("Authorization",
-                Credentials.basic(email?:"test", password?:"12345")
+                Credentials.basic(email?:"", password?:"")
             ).build()
         return chain.proceed(authenticatedRequest)
     }
