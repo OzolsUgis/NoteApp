@@ -20,7 +20,6 @@ class NoteRepository @Inject constructor(
     private val noteDao: NoteDao,
     private val context: Application
 ) {
-    val notesResponse : Response<List<Notes>>? = null
 
     suspend fun insertNote(note: Notes) {
         val insertNote = try {
