@@ -65,7 +65,7 @@ fun NoteScreen(
                         }
 
                     }){
-                    ShowNotes(viewModel = viewModel)
+                    ShowNotes(navController,viewModel = viewModel)
                 }
             }
         }
@@ -116,6 +116,7 @@ fun TopBar(navController: NavController) {
 
     @Composable
     fun ShowNotes(
+        navController: NavController,
         viewModel: NotesViewModel
     ) {
         val notesDataState = viewModel.notes.observeAsState()
@@ -135,7 +136,7 @@ fun TopBar(navController: NavController) {
                     EmptyState()
                 } else {
                     val list = notesDataState.value?.data?.toList()
-                    SuccessfullyLoadedNotes(note = list)
+                    SuccessfullyLoadedNotes(note = list,navController)
                 }
             }
             is Resource.Error -> {
@@ -165,7 +166,7 @@ fun TopBar(navController: NavController) {
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    private fun SuccessfullyLoadedNotes(note : List<Notes>?) {
+    private fun SuccessfullyLoadedNotes(note : List<Notes>?, navController: NavController) {
         val notes = note.orEmpty()
         Timber.d(notes.size.toString())
         LazyVerticalGrid(cells = GridCells.Adaptive(gridCellsWidth)){
@@ -180,7 +181,7 @@ fun TopBar(navController: NavController) {
                             .height(noteCardHeight)
                             .padding()
                             .clickable {
-                                // Here goes navigation to note details
+                                navController.navigate(Screen.NoteDetail.withArgs(it.id))
                             }
                         ,
                         shape = RoundedCornerShape(cardRoundedCorners),
