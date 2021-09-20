@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ugisozols.noteapp.data.remote.BasicAuthInterceptor
 import com.ugisozols.noteapp.presentation.login.LoginScreen
+import com.ugisozols.noteapp.presentation.newnotes.NewNotesScreen
 import com.ugisozols.noteapp.presentation.notes.NoteScreen
 import com.ugisozols.noteapp.presentation.registration.RegistrationScreen
 import com.ugisozols.noteapp.utitilies.Screen
@@ -23,6 +24,9 @@ fun Navigation( navController : NavHostController) {
         }
         composable(Screen.Notes.route){
             NoteScreen(navController)
+        }
+        composable(Screen.NewNotes.route){
+            NewNotesScreen(navController = navController)
         }
 
     }
