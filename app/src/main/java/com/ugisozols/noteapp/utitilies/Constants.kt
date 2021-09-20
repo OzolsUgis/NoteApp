@@ -5,7 +5,7 @@ object Constants {
     val BASIC_AUTH_IGNORE_URLS = listOf("/login","/register")
 
     const val DATABASE_NAME = "notes_db"
-    const val BASE_URL = "http://10.0.2.2:8001"
+    const val BASE_URL = "http://192.168.8.100:8001"
     const val MIN_PASSWORD_LENGTH = 8
 
     // Shared Preferences
@@ -29,6 +29,8 @@ object Constants {
     const val LOGIN_SCREEN_ROUTE = "login"
     const val NOTES_SCREEN_ROUTE = "notes"
     const val NEW_NOTES_SCREEN_ROUTE = "new_note"
+    const val NOTE_DETAIL_SCREEN_ROUTE = "note_detail"
+    const val EDIT_NOTE_SCREEN_ROUTE = "edit_note"
 
 
 }
