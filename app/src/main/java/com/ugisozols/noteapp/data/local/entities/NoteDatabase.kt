@@ -10,8 +10,8 @@ import com.ugisozols.noteapp.data.local.NoteDao
 
 
 @Database(
-    entities = [Notes::class, Folders::class],
-    version = 1
+    entities = [Notes::class,Folders::class, DeletedNotesInDatabase::class],
+    version = 2
 
 )
 @TypeConverters(Converters::class)
