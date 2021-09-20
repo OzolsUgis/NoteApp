@@ -1,13 +1,16 @@
 package com.ugisozols.noteapp.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
-import com.ugisozols.noteapp.data.local.FolderDao
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.ugisozols.noteapp.data.local.entities.NoteDatabase
 import com.ugisozols.noteapp.data.remote.BasicAuthInterceptor
 import com.ugisozols.noteapp.data.remote.NoteAppApi
 import com.ugisozols.noteapp.utitilies.Constants.BASE_URL
 import com.ugisozols.noteapp.utitilies.Constants.DATABASE_NAME
+import com.ugisozols.noteapp.utitilies.Constants.ENCRYPTED_SHARED_PREFERENCES_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,6 +62,23 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(NoteAppApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEncryptedSharedPreferences(
+        @ApplicationContext context: Context
+    ): SharedPreferences{
+        val masterKey = MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+        return EncryptedSharedPreferences.create(
+            context,
+            ENCRYPTED_SHARED_PREFERENCES_NAME,
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
     }
 }
 
