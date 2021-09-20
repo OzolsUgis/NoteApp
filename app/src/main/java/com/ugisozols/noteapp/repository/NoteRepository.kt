@@ -44,22 +44,24 @@ class NoteRepository @Inject constructor(
         }
     }
 
-//    suspend fun deleteNoteById(noteId: String){
-//        val deleteNote = try {
-//            noteAppApi.deleteNote(DeleteNoteRequest(noteId))
-//        }catch (e: Exception){
-//            null
-//        }
-//        noteDao.deleteNoteById(noteId)
-//        if(deleteNote == null || !deleteNote.isSuccessful){
-//            noteDao.insertDeletedInDatabaseNoteId(DeletedNotesInDatabase(noteId))
-//        }else{
-//            deleteDeletedInDatabaseNoteIds(noteId)
-//        }
-//        }
-//    suspend fun deleteDeletedInDatabaseNoteIds(noteId : String){
-//        noteDao.deleteDeletedInDatabaseNoteIds(noteId)
-//    }
+    suspend fun deleteNoteById(noteId: String){
+        val deleteNote = try {
+            noteAppApi.deleteNote(DeleteNoteRequest(noteId))
+        }catch (e: Exception){
+            null
+        }
+        noteDao.deleteNoteById(noteId)
+        if(deleteNote == null || !deleteNote.isSuccessful){
+            noteDao.insertDeletedInDatabaseNoteId(DeletedNotesInDatabase(noteId))
+        }else{
+            deleteDeletedInDatabaseNoteIds(noteId)
+        }
+        }
+    suspend fun deleteDeletedInDatabaseNoteIds(noteId : String){
+        noteDao.deleteDeletedInDatabaseNoteIds(noteId)
+    }
+
+    fun observeNotes(noteId: String) = noteDao.observeNoteById(noteId)
 
     suspend fun getNoteById(noteId : String) = noteDao.getNoteById(noteId)
 
