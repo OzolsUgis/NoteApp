@@ -56,11 +56,10 @@ fun NoteScreen(
                 contentAlignment = Alignment.TopStart
             ){
                 Scaffold(
-                    modifier = Modifier.padding(bottom =fabLiftHeight),
                     floatingActionButtonPosition = FabPosition.End,
                     floatingActionButton = {
                             FloatingActionButton(backgroundColor = MainAccent,contentColor = SurfaceColor,onClick = {
-                                // TODO add new note page navigation
+                                navController.navigate(Screen.NewNotes.route)
                             }) {
                                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
                         }
@@ -69,16 +68,8 @@ fun NoteScreen(
                     ShowNotes(viewModel = viewModel)
                 }
             }
-
-
         }
-            BottomNavigationBar(navController = navController)
-
-
-
     }
-
-
 }
 
 @Composable
@@ -117,28 +108,6 @@ fun TopBar(navController: NavController) {
         }
 
     }
-}
-
-@Composable
-fun BottomNavigationBar(navController: NavController) {
-    BottomNavBar(
-        items = listOf(
-            NavBarItem(
-                title = stringResource(id = R.string.nav_notes_title),
-                icon = painterResource(id = R.drawable.ic_note_writing),
-                route = NOTES_SCREEN_ROUTE
-            ),
-            NavBarItem(
-                title = stringResource(id = R.string.nav_folders_title),
-                icon = painterResource(id = R.drawable.ic_folder_icon),
-                route = REGISTER_SCREEN_ROUTE
-            )
-        ),
-        navController = navController,
-        onItemClick = {
-            navController.navigate(it.route)
-        }
-    )
 }
 
 
