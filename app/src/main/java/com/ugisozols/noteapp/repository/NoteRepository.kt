@@ -9,7 +9,10 @@ import com.ugisozols.noteapp.data.remote.requests.DeleteNoteRequest
 import com.ugisozols.noteapp.utitilies.Resource
 import com.ugisozols.noteapp.utitilies.checkInternetConnectivity
 import com.ugisozols.noteapp.utitilies.networkBoundResources
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import retrofit2.Response
 import timber.log.Timber
 
@@ -21,7 +24,8 @@ class NoteRepository @Inject constructor(
     private val context: Application
 ) {
 
-    suspend fun insertNote(note: Notes) {
+    @OptIn(DelicateCoroutinesApi::class)
+    suspend fun insertNote(note: Notes) = GlobalScope.launch {
         val insertNote = try {
             noteAppApi.addNotes(note)
         }catch (e: Exception){
@@ -57,7 +61,7 @@ class NoteRepository @Inject constructor(
 //        noteDao.deleteDeletedInDatabaseNoteIds(noteId)
 //    }
 
-    suspend fun getNoteById(noteId : String) = noteDao.deleteNoteById(noteId)
+    suspend fun getNoteById(noteId : String) = noteDao.getNoteById(noteId)
 
     fun getAllNotes() : Flow<Resource<out List<Notes>>> {
         return networkBoundResources(
