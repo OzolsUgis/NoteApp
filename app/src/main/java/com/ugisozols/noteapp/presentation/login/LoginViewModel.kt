@@ -1,13 +1,17 @@
 package com.ugisozols.noteapp.presentation.login
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.security.crypto.EncryptedSharedPreferences
 import com.ugisozols.noteapp.data.remote.BasicAuthInterceptor
 import com.ugisozols.noteapp.repository.AuthRepository
 import com.ugisozols.noteapp.utitilies.Constants
 import com.ugisozols.noteapp.utitilies.Constants.EMPTY_FIELD_ERROR
+import com.ugisozols.noteapp.utitilies.Constants.KEY_EMAIL
+import com.ugisozols.noteapp.utitilies.Constants.KEY_PASSWORD
 import com.ugisozols.noteapp.utitilies.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val authInterceptor: BasicAuthInterceptor
+    private val authInterceptor: BasicAuthInterceptor,
+    private val sharedPreferences: SharedPreferences
 ): ViewModel() {
 
 
@@ -51,5 +56,10 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _login.postValue(repository.login(email, password))
         }
+    }
+
+    fun setSharedPreferencesEmailAndPassword(email: String, password: String){
+        sharedPreferences.edit().putString(KEY_EMAIL,email).apply()
+        sharedPreferences.edit().putString(KEY_PASSWORD, password).apply()
     }
 }
