@@ -22,20 +22,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.security.crypto.EncryptedSharedPreferences
 import com.ugisozols.noteapp.R
-import com.ugisozols.noteapp.data.remote.BasicAuthInterceptor
+
 import com.ugisozols.noteapp.presentation.components.StandardTextField
-import com.ugisozols.noteapp.presentation.registration.RegisterState
 import com.ugisozols.noteapp.presentation.ui.theme.*
-import com.ugisozols.noteapp.utitilies.Constants
 import com.ugisozols.noteapp.utitilies.Constants.EMPTY_FIELD_ERROR
+
 import com.ugisozols.noteapp.utitilies.Constants.NOTES_SCREEN_ROUTE
 import com.ugisozols.noteapp.utitilies.Resource
 import com.ugisozols.noteapp.utitilies.Screen
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
@@ -119,7 +115,7 @@ fun LoginInputSection(viewModel: LoginViewModel,navController: NavController) {
                     viewModel.authenticate(email,password)
                     Timber.d(email)
                     Timber.d(password)
-
+                    viewModel.setSharedPreferencesEmailAndPassword(email, password)
                     buttonIsClicked = true
                     Timber.d("this is from on click")
 
