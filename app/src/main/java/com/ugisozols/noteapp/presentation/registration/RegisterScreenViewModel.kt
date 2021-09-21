@@ -20,7 +20,7 @@ class RegisterScreenViewModel @Inject constructor(
     private val repository : AuthRepository
 ): ViewModel() {
 
-    private val _email = MutableLiveData<String>("")
+    private val _email = MutableLiveData("")
     val email : LiveData<String> = _email
 
     fun onEmailChange(newEmail : String){
@@ -28,14 +28,14 @@ class RegisterScreenViewModel @Inject constructor(
     }
 
 
-    private val _password = MutableLiveData<String>("")
+    private val _password = MutableLiveData("")
     val password : LiveData<String> = _password
 
     fun onPasswordChange(newPassword : String) {
         _password.value = newPassword
     }
 
-    private val _confirmedPassword = MutableLiveData<String>("")
+    private val _confirmedPassword = MutableLiveData("")
     val confirmedPassword : LiveData<String> = _confirmedPassword
 
     fun onConfirmedPasswordChange(newConfirmedPassword : String) {

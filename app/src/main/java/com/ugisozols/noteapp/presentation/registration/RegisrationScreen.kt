@@ -30,8 +30,6 @@ import com.ugisozols.noteapp.utitilies.Constants.SERVER_CONNECTION_ERROR
 import com.ugisozols.noteapp.utitilies.Constants.TOO_SHORT_PASSWORD_ERROR
 import com.ugisozols.noteapp.utitilies.Resource
 import com.ugisozols.noteapp.utitilies.Screen
-import timber.log.Timber
-
 
 @Composable
 fun RegistrationScreen(
@@ -55,7 +53,7 @@ fun RegistrationScreen(
                     .align(CenterHorizontally)
                     .size(150.dp),
                 painter = mainNoteLogo,
-                contentDescription = "Notes Logo",
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.height(paddingLarge))
             RegistrationSection(navController = navController, viewModel = registerViewModel)
@@ -120,16 +118,15 @@ fun RegistrationSection(
                 onClick = {
                     viewModel.registerUser(email, password, confirmedPassword)
                     buttonIsClicked = true
-                    Timber.d("this is from on click")
                 },
-                shape = RoundedCornerShape(textfieldRaundedCorners)
+                shape = RoundedCornerShape(textfieldRoundedCorners)
             ) {
                 Text(text = stringResource(id = R.string.register_button_title),color = ButtonTextColor)
             }
       
         }
 
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(spacerLarge))
         Text(
             modifier = Modifier
                 .align(CenterHorizontally)
@@ -148,7 +145,7 @@ fun RegistrationSection(
                 append(stringResource(id = R.string.register_login))
             }
         })
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(spacerLarge))
 
 
 
@@ -170,14 +167,13 @@ fun RegisterState( registerState : Resource<String>) {
                 color = MainAccent,
                 strokeWidth = loadingProgressBarWidth,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(registerProgressBarSize)
                     .wrapContentSize()
             )
         }
         is Resource.Success -> {
             when(registerState.data.toString()){
                 accountCreated -> {
-                    // Here goes account created snackBar and redirect to login screen
                     Text(
                         text = registrationSuccessful,
                         color = SuccessfulColor,
@@ -205,28 +201,28 @@ fun RegisterState( registerState : Resource<String>) {
             when(registerState.message.toString()){
                 SERVER_CONNECTION_ERROR -> {
                     Text(
-                        text = registerState.message?: "This is null case",
+                        text = registerState.message?: "",
                         color = ErrorColor,
                         fontSize = errorFontSize
                     )
                 }
                 EMPTY_FIELD_ERROR -> {
                     Text(
-                        text = registerState.message?: "This is null case",
+                        text = registerState.message?: "",
                         color = ErrorColor,
                         fontSize = errorFontSize
                     )
                 }
                 TOO_SHORT_PASSWORD_ERROR ->{
                     Text(
-                        text = registerState.message?: "This is null case",
+                        text = registerState.message?: "",
                         color = ErrorColor,
                         fontSize = errorFontSize
                     )
                 }
                 PASSWORDS_DO_NOT_MATCH_ERROR ->{
                     Text(
-                        text = registerState.message?: "This is null case",
+                        text = registerState.message?: "",
                         color = ErrorColor,
                         fontSize = errorFontSize
                     )

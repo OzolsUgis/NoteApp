@@ -1,10 +1,8 @@
 package com.ugisozols.noteapp.presentation.notes
 
 
-import android.widget.Space
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -17,6 +15,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,19 +24,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ugisozols.noteapp.R
 import com.ugisozols.noteapp.data.local.entities.Notes
-import com.ugisozols.noteapp.presentation.components.BottomNavBar
+import com.ugisozols.noteapp.presentation.components.ShowAlertDialog
 import com.ugisozols.noteapp.presentation.ui.theme.*
-import com.ugisozols.noteapp.utitilies.Constants.NOTES_SCREEN_ROUTE
-import com.ugisozols.noteapp.utitilies.Constants.REGISTER_SCREEN_ROUTE
-import com.ugisozols.noteapp.utitilies.NavBarItem
 import com.ugisozols.noteapp.utitilies.Resource
 import com.ugisozols.noteapp.utitilies.Screen
-import timber.log.Timber
+
 
 @Composable
 fun NoteScreen(
@@ -47,8 +43,8 @@ fun NoteScreen(
         modifier = Modifier.wrapContentSize(),
         contentAlignment = Alignment.BottomStart
     ) {
-        Column() {
-            TopBar(navController = navController)
+        Column {
+            TopBar(navController = navController,viewModel)
             Headline()
             Spacer(modifier = Modifier.height(paddingLarge))
             Box(
@@ -81,8 +77,8 @@ fun Headline() {
     )
 }
 @Composable
-fun TopBar(navController: NavController) {
-
+fun TopBar(navController: NavController, viewModel: NotesViewModel) {
+    val (dialogIsOpen, setShowDialog) = remember { mutableStateOf(false) }
     TopAppBar(
         backgroundColor = BackgroundColor,
         contentColor = MainAccent,
@@ -98,13 +94,34 @@ fun TopBar(navController: NavController) {
         ) {
             Icon(
                 imageVector = Icons.Default.ExitToApp,
-                contentDescription = "LogOut",
+                contentDescription = null,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(exitIconSize)
                     .clickable {
-                        navController.navigate(Screen.Login.route)
+                        setShowDialog(true)
                     }
             )
+            if (dialogIsOpen) {
+                ShowAlertDialog(
+                    title = stringResource(id = R.string.alert_dialog_logout_title),
+                    content = stringResource(id = R.string.alert_dialog_logout_content),
+                    confirm = stringResource(id = R.string.confirm),
+                    decline = stringResource(id = R.string.decline),
+                    onDismiss = { setShowDialog(false) },
+                    onConfirmClick = {
+                        viewModel.setLogoutSharedPreferencesEmailAndPassword()
+                        setShowDialog(false)
+                        navController.navigate(Screen.Login.route){
+                            popUpTo(Screen.Notes.route){
+                                inclusive = true
+                            }
+                        }
+                    },
+                    onDeclineClick = {
+                        setShowDialog(false)
+                    },
+                )
+            }
         }
 
     }
@@ -168,7 +185,6 @@ fun TopBar(navController: NavController) {
     @Composable
     private fun SuccessfullyLoadedNotes(note : List<Notes>?, navController: NavController) {
         val notes = note.orEmpty()
-        Timber.d(notes.size.toString())
         LazyVerticalGrid(cells = GridCells.Adaptive(gridCellsWidth)){
             items(notes){
                 Row(
@@ -187,7 +203,7 @@ fun TopBar(navController: NavController) {
                         shape = RoundedCornerShape(cardRoundedCorners),
                         backgroundColor = SurfaceColor
                     ) {
-                        Column() {
+                        Column {
                             Text(modifier = Modifier.padding(
                                 top = paddingMedium,
                                 start = paddingMedium

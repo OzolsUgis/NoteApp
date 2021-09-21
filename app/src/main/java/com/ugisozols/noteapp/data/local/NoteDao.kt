@@ -23,22 +23,15 @@ interface NoteDao {
     @Query("DELETE FROM notes WHERE isSyncedToServer = 1 ")
     suspend fun deleteAllSyncedNotes()
 
-    // isSyncedToServer = false
-    @Query("SELECT * FROM notes WHERE isSyncedToServer = 0")
-    suspend fun getAllUnsyncedNotes() : List<Notes>
-
-
     @Query("SELECT * FROM notes WHERE id= :noteId")
     fun observeNoteById(noteId: String): LiveData<Notes>
 
     @Query("SELECT * FROM notes WHERE id= :noteId")
     suspend fun getNoteById(noteId: String) : Notes?
 
-    @Query("SELECT * FROM notes ORDER BY date DESC")
-    fun getAllNotes(): Flow<List<Notes>>
+    @Query("SELECT * FROM notes WHERE userEmail= :userEmail ORDER BY date DESC")
+    fun getAllNotes(userEmail : String): Flow<List<Notes>>
 
-    @Query("SELECT * FROM deleted_note_ids")
-    suspend fun getAllDeletedInDatabaseNoteIds() : List<DeletedNotesInDatabase>
 
     @Query("DELETE FROM deleted_note_ids WHERE deletedNoteId = :deletedNoteId")
     suspend fun deleteDeletedInDatabaseNoteIds(deletedNoteId : String)

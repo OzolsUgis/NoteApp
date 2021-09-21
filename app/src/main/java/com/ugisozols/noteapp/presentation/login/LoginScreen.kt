@@ -1,7 +1,6 @@
 package com.ugisozols.noteapp.presentation.login
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,26 +12,24 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.security.crypto.EncryptedSharedPreferences
 import com.ugisozols.noteapp.R
-
 import com.ugisozols.noteapp.presentation.components.StandardTextField
 import com.ugisozols.noteapp.presentation.ui.theme.*
 import com.ugisozols.noteapp.utitilies.Constants.EMPTY_FIELD_ERROR
-
 import com.ugisozols.noteapp.utitilies.Constants.NOTES_SCREEN_ROUTE
+import com.ugisozols.noteapp.utitilies.Constants.NO_EMAIL
+import com.ugisozols.noteapp.utitilies.Constants.NO_PASSWORD
 import com.ugisozols.noteapp.utitilies.Resource
 import com.ugisozols.noteapp.utitilies.Screen
-import timber.log.Timber
+
+
 
 @Composable
 fun LoginScreen(
@@ -41,25 +38,52 @@ fun LoginScreen(
 
 ) {
 
-    val logo = painterResource(id = R.drawable.ic_sticky_notes)
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = paddingMedium)
-        ) {
-            LogoSection(logo = logo, modifier = Modifier.size(logoSize))
-            Spacer(modifier = Modifier.height(paddingLarge))
-            LoginInputSection(viewModel, navController)
-            Spacer(modifier = Modifier.height(paddingLarge))
-            Spacer(modifier = Modifier.height(paddingLarge))
-            CreateAccount(navController = navController)
-            Spacer(modifier = Modifier.height(200.dp))
+    val currentlyLoggedInEmail = viewModel.loggedInEmail
+    val currentlyLoggedInPassword = viewModel.loggedInPassword
+
+
+    if (isLoggedIn(currentlyLoggedInEmail?:"",currentlyLoggedInPassword ?: "")){
+        viewModel.login(currentlyLoggedInEmail ?: "",currentlyLoggedInPassword ?: "")
+        viewModel.authenticate(currentlyLoggedInEmail ?: "", currentlyLoggedInPassword ?: "")
+        LaunchedEffect(Unit){
+            navController.navigate(Screen.Notes.route){
+                popUpTo(Screen.Login.route){
+                    inclusive = true
+                }
+            }
         }
 
+    }else{
+        val logo = painterResource(id = R.drawable.ic_sticky_notes)
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = paddingMedium)
+            ) {
+                LogoSection(logo = logo, modifier = Modifier.size(logoSize))
+                Spacer(modifier = Modifier.height(paddingLarge))
+                LoginInputSection(viewModel, navController)
+                Spacer(modifier = Modifier.height(paddingLarge))
+                Spacer(modifier = Modifier.height(paddingLarge))
+                CreateAccount(navController = navController)
+                Spacer(modifier = Modifier.height(200.dp))
+            }
+
+        }
     }
+
+
+
+
+
+}
+
+
+private fun isLoggedIn(curEmail : String, curPassword: String): Boolean {
+    return curEmail != NO_EMAIL && curPassword != NO_PASSWORD
 }
 
 @Composable
@@ -113,14 +137,11 @@ fun LoginInputSection(viewModel: LoginViewModel,navController: NavController) {
                 onClick = {
                     viewModel.login(email, password)
                     viewModel.authenticate(email,password)
-                    Timber.d(email)
-                    Timber.d(password)
                     viewModel.setSharedPreferencesEmailAndPassword(email, password)
                     buttonIsClicked = true
-                    Timber.d("this is from on click")
 
                 },
-                shape = RoundedCornerShape(textfieldRaundedCorners)
+                shape = RoundedCornerShape(textfieldRoundedCorners)
             ) {
 
                 Text(text = stringResource(id = R.string.login_button_title),color = ButtonTextColor)
@@ -138,7 +159,6 @@ fun LoginState(loginState : Resource<String>, navController: NavController){
         val loginPassed = stringResource(id = R.string.login_passed)
         when (loginState) {
             is Resource.Loading -> {
-                Timber.d("This is loading state ")
                 CircularProgressIndicator(
                     color = MainAccent,
                     strokeWidth = loadingProgressBarWidth,
@@ -148,7 +168,6 @@ fun LoginState(loginState : Resource<String>, navController: NavController){
                 )
             }
             is Resource.Success -> {
-                Timber.d("This is success state ")
                 when (loginState.data.toString()) {
                     incorrectCredentials -> {
                         Text(
@@ -158,19 +177,18 @@ fun LoginState(loginState : Resource<String>, navController: NavController){
                         )
                     }
                     loginPassed -> {
-
                         LaunchedEffect(Unit ){
-                            navController.navigate(NOTES_SCREEN_ROUTE)
-                            Timber.d("Login Successful")
+                            navController.navigate(NOTES_SCREEN_ROUTE){
+                                popUpTo(Screen.Login.route){
+                                    inclusive = true
+                                }
+                            }
+
                         }
-
-                        // Passes navigation route to home route
-
                     }
                 }
             }
             is Resource.Error -> {
-                Timber.d("This is error state ")
                 when (loginState.message) {
                     EMPTY_FIELD_ERROR -> {
                         Text(
@@ -202,6 +220,6 @@ fun LogoSection(logo : Painter, modifier: Modifier) {
     Image(
         modifier = modifier,
         painter = logo,
-        contentDescription = "Notes Logo",
+        contentDescription = null,
     )
 }

@@ -1,7 +1,5 @@
 package com.ugisozols.noteapp.presentation.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,9 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import com.ugisozols.noteapp.presentation.ui.theme.SurfaceColor
-import com.ugisozols.noteapp.presentation.ui.theme.textfieldRaundedCorners
+import com.ugisozols.noteapp.presentation.ui.theme.textfieldRoundedCorners
 
 
 @Composable
@@ -33,7 +30,7 @@ fun StandardTextField(
     onValueChange : (String)-> Unit
 ) {
     TextField(
-        shape = RoundedCornerShape(textfieldRaundedCorners),
+        shape = RoundedCornerShape(textfieldRoundedCorners),
         modifier = Modifier
             .fillMaxWidth(),
         colors = TextFieldDefaults.textFieldColors(

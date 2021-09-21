@@ -13,9 +13,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import retrofit2.Response
-import timber.log.Timber
-
 import javax.inject.Inject
 
 class NoteRepository @Inject constructor(
@@ -24,8 +21,9 @@ class NoteRepository @Inject constructor(
     private val context: Application
 ) {
 
+
     @OptIn(DelicateCoroutinesApi::class)
-    suspend fun insertNote(note: Notes) = GlobalScope.launch {
+    suspend fun insertNote(note: Notes) =  GlobalScope.launch{
         val insertNote = try {
             noteAppApi.addNotes(note)
         }catch (e: Exception){
@@ -38,7 +36,7 @@ class NoteRepository @Inject constructor(
         }
     }
 
-    suspend fun insertAllNotes(notes : List<Notes>){
+    private suspend fun insertAllNotes(notes : List<Notes>){
         notes.forEach{ note->
             insertNote(note)
         }
@@ -57,7 +55,7 @@ class NoteRepository @Inject constructor(
             deleteDeletedInDatabaseNoteIds(noteId)
         }
         }
-    suspend fun deleteDeletedInDatabaseNoteIds(noteId : String){
+    private suspend fun deleteDeletedInDatabaseNoteIds(noteId : String){
         noteDao.deleteDeletedInDatabaseNoteIds(noteId)
     }
 
@@ -65,27 +63,20 @@ class NoteRepository @Inject constructor(
 
     suspend fun getNoteById(noteId : String) = noteDao.getNoteById(noteId)
 
-    fun getAllNotes() : Flow<Resource<out List<Notes>>> {
+    fun getAllNotes(userEmail : String) : Flow<Resource<out List<Notes>>> {
         return networkBoundResources(
             query = {
-                Timber.d("This is from query")
-                noteDao.getAllNotes()
+                noteDao.getAllNotes(userEmail)
             },
             fetch = {
-
-                Timber.d("This is from fetching")
                 noteAppApi.getNotes()
             },
             saveFetchResultToDatabase = { response ->
-
-                Timber.d("This is from save fetch result to database ")
                 response.body()?.let {
                     insertAllNotes(it)
                 }
             },
             shouldFetch = {
-
-                Timber.d("internet checker passed")
                 checkInternetConnectivity(context = context)
             }
         )

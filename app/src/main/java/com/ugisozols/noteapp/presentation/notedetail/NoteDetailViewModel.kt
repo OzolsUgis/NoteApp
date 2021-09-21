@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.ugisozols.noteapp.data.local.entities.Notes
 import com.ugisozols.noteapp.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

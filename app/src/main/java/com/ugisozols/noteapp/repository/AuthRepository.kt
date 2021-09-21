@@ -7,9 +7,7 @@ import com.ugisozols.noteapp.utitilies.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.lang.Exception
-import java.sql.Time
 import javax.inject.Inject
 
 
@@ -29,7 +27,6 @@ class AuthRepository @Inject constructor(
                 Resource.Error(apiCallResponse.message(), null)
             }
         }catch (e : Exception){
-            Timber.d(e)
             Resource.Error(SERVER_CONNECTION_ERROR, null)
         }
     }
@@ -48,7 +45,6 @@ class AuthRepository @Inject constructor(
                 Resource.Error(apiCallResponse.message(), null)
             }
         }catch (e : Exception){
-            Timber.d(e)
             Resource.Error(SERVER_CONNECTION_ERROR, null)
         }
     }

@@ -4,13 +4,12 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.security.crypto.EncryptedSharedPreferences
 import com.ugisozols.noteapp.data.local.entities.Notes
 import com.ugisozols.noteapp.repository.NoteRepository
 import com.ugisozols.noteapp.utitilies.Constants.KEY_EMAIL
 import com.ugisozols.noteapp.utitilies.Constants.NO_EMAIL
-import com.ugisozols.noteapp.utitilies.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,14 +20,14 @@ class NewNotesViewModel @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ): ViewModel() {
 
-    private val _titleInput = MutableLiveData<String>("")
+    private val _titleInput = MutableLiveData("")
     val titleInput : LiveData<String> = _titleInput
 
     fun onTitleChange(newTitle : String){
         _titleInput.value = newTitle
     }
 
-    private val _contentInput = MutableLiveData<String>("")
+    private val _contentInput = MutableLiveData("")
     val contentInput : LiveData<String> = _contentInput
 
     fun onContentChange(content : String){
@@ -36,6 +35,7 @@ class NewNotesViewModel @Inject constructor(
     }
 
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun saveNote(notes: Notes) = GlobalScope.launch{
             noteRepository.insertNote(notes)
     }

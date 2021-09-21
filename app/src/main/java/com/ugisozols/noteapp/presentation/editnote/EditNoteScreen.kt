@@ -13,22 +13,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.ugisozols.noteapp.R
 import com.ugisozols.noteapp.data.local.entities.Notes
 import com.ugisozols.noteapp.presentation.components.StandardTextField
-import com.ugisozols.noteapp.presentation.newnotes.NewNoteHeading
-import com.ugisozols.noteapp.presentation.newnotes.NewNotesViewModel
 import com.ugisozols.noteapp.presentation.ui.theme.*
 import com.ugisozols.noteapp.utitilies.Screen
-import timber.log.Timber
-import java.util.*
-
 
 @Composable
 fun EditNoteScreen(viewModel: EditNoteViewModel = hiltViewModel(),noteId : String, navController: NavController) {
     val note by viewModel.getNote(noteId).observeAsState()
-    Timber.d(note.toString())
     note?.let {
         viewModel.setTitle(it.title)
         viewModel.setContent(it.content)
@@ -61,32 +57,29 @@ fun TopBarSection(
     )
     {
         Row (verticalAlignment = Alignment.CenterVertically){
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back",tint = MainAccent)
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null,tint = MainAccent)
             Spacer(modifier = Modifier.width(paddingSmall))
-            Text(text ="Back", modifier = Modifier.clickable {
+            Text(text = stringResource(id = R.string.back_button), modifier = Modifier.clickable {
                 navController.navigate(Screen.Notes.route)
             })
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(imageVector = Icons.Default.Done, contentDescription = "Done", tint = MainAccent)
+            Icon(imageVector = Icons.Default.Done, contentDescription = null, tint = MainAccent)
             Spacer(modifier = Modifier.width(paddingSmall))
-            Text(text = "Save", Modifier.clickable {
+            Text(text = stringResource(id = R.string.save_button), Modifier.clickable {
                 val title = viewModel.title.value.orEmpty()
                 val date = System.currentTimeMillis()
-                val id = noteId
                 val content = viewModel.content.value.orEmpty()
-                val email = email
                 viewModel.saveNote(
                     Notes(
                     title = title,
                     content = content,
                     date = date,
                     isSyncedToServer = false,
-                    id = id,
+                    id = noteId,
                     userEmail = email
                 )
                 )
-                Timber.d(email)
                 navController.navigate(Screen.Notes.route)
 
             })
@@ -97,19 +90,18 @@ fun TopBarSection(
 
 @Composable
 fun EditNoteHeading() {
-    Text(text = "Edit Note",style = MaterialTheme.typography.h1)
+    Text(text = stringResource(id = R.string.edit_note_title),style = MaterialTheme.typography.h1)
 }
 
 @Composable
 fun TitleInput(viewModel: EditNoteViewModel) {
     val title by viewModel.title.observeAsState()
-    Timber.d("title = $title")
     title?.let {
         StandardTextField(
-            onValueChange = {
-                viewModel.setTitle(it)
+            onValueChange = { title ->
+                viewModel.setTitle(title)
             },
-            hint = "Enter title here",
+            hint = stringResource(id = R.string.title_input_hint),
             text =  it
         )
     }
@@ -121,10 +113,10 @@ fun ContentInput(viewModel: EditNoteViewModel){
     content?.let {
         TextField(
             value = it,
-            onValueChange = {
-                viewModel.setContent(it)
+            onValueChange = { content->
+                viewModel.setContent(content)
             },
-            shape = RoundedCornerShape(textfieldRaundedCorners),
+            shape = RoundedCornerShape(textfieldRoundedCorners),
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(),

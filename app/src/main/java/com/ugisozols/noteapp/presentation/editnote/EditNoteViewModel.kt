@@ -5,14 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ugisozols.noteapp.data.local.entities.Notes
-import com.ugisozols.noteapp.presentation.notes.TopBar
 import com.ugisozols.noteapp.repository.NoteRepository
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +28,7 @@ class EditNoteViewModel @Inject constructor(
         _title.value = newTitle
     }
 
-    private val _content = MutableLiveData<String>(note.value?.content )
+    private val _content = MutableLiveData<String>(note.value?.content)
     val content : LiveData<String> = _content
 
     fun setContent(newContent : String){

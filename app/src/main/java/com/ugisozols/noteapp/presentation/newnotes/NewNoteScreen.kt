@@ -1,6 +1,6 @@
 package com.ugisozols.noteapp.presentation.newnotes
 
-import android.widget.Space
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,17 +14,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.security.crypto.EncryptedSharedPreferences
+import com.ugisozols.noteapp.R
 import com.ugisozols.noteapp.data.local.entities.Notes
 import com.ugisozols.noteapp.presentation.components.StandardTextField
 import com.ugisozols.noteapp.presentation.ui.theme.*
-import com.ugisozols.noteapp.utitilies.Constants.KEY_EMAIL
-import com.ugisozols.noteapp.utitilies.Constants.NO_EMAIL
 import com.ugisozols.noteapp.utitilies.Screen
-import timber.log.Timber
 import java.util.*
 
 @Composable
@@ -55,16 +52,16 @@ fun TopBarSection(
     )
     {
         Row (verticalAlignment = Alignment.CenterVertically){
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back",tint = MainAccent)
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null,tint = MainAccent)
             Spacer(modifier = Modifier.width(paddingSmall))
-            Text(text ="Back", modifier = Modifier.clickable {
+            Text(text = stringResource(id = R.string.back_button), modifier = Modifier.clickable {
                 navController.navigate(Screen.Notes.route)
             })
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(imageVector = Icons.Default.Done, contentDescription = "Done", tint = MainAccent)
+            Icon(imageVector = Icons.Default.Done, contentDescription = null, tint = MainAccent)
             Spacer(modifier = Modifier.width(paddingSmall))
-            Text(text = "Save", Modifier.clickable {
+            Text(text = stringResource(id = R.string.save_button), Modifier.clickable {
                 val title = viewModel.titleInput.value.orEmpty()
                 val date = System.currentTimeMillis()
                 val id = UUID.randomUUID().toString()
@@ -78,8 +75,11 @@ fun TopBarSection(
                     id = id,
                     userEmail = email
                 ))
-                Timber.d(email)
-                navController.navigate(Screen.Notes.route)
+                navController.navigate(Screen.Notes.route){
+                    popUpTo(Screen.NewNotes.route){
+                        inclusive = true
+                    }
+                }
 
             })
 
@@ -89,7 +89,7 @@ fun TopBarSection(
 
 @Composable
 fun NewNoteHeading() {
-    Text(text = "New note",style = MaterialTheme.typography.h1)
+    Text(text = stringResource(id = R.string.new_note_title),style = MaterialTheme.typography.h1)
 }
 
 @Composable
@@ -99,7 +99,7 @@ fun TitleInput(viewModel: NewNotesViewModel) {
         onValueChange = {
             viewModel.onTitleChange(it)
         },
-        hint = "Enter title here",
+        hint = stringResource(id = R.string.title_input_hint),
         text = title
     )
 }
@@ -112,7 +112,7 @@ fun ContentInput(viewModel: NewNotesViewModel){
         onValueChange = {
             viewModel.onContentChange(it)
         },
-        shape = RoundedCornerShape(textfieldRaundedCorners),
+        shape = RoundedCornerShape(textfieldRoundedCorners),
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(),

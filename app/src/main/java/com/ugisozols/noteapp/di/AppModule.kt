@@ -35,10 +35,6 @@ object AppModule {
         DATABASE_NAME
     ).build()
 
-    @Singleton
-    @Provides
-    fun provideFolderDao(database : NoteDatabase) = database.folderDao()
-
 
     @Singleton
     @Provides

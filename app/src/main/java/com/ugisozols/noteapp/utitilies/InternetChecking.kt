@@ -2,9 +2,8 @@ package com.ugisozols.noteapp.utitilies
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.ConnectivityManager.*
 import android.net.NetworkCapabilities
-import android.os.Build
+
 
 
 fun checkInternetConnectivity(context: Context): Boolean {

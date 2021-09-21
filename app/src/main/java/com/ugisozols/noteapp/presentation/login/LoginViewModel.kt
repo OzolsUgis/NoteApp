@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.security.crypto.EncryptedSharedPreferences
 import com.ugisozols.noteapp.data.remote.BasicAuthInterceptor
 import com.ugisozols.noteapp.repository.AuthRepository
-import com.ugisozols.noteapp.utitilies.Constants
 import com.ugisozols.noteapp.utitilies.Constants.EMPTY_FIELD_ERROR
 import com.ugisozols.noteapp.utitilies.Constants.KEY_EMAIL
 import com.ugisozols.noteapp.utitilies.Constants.KEY_PASSWORD
+import com.ugisozols.noteapp.utitilies.Constants.NO_EMAIL
+import com.ugisozols.noteapp.utitilies.Constants.NO_PASSWORD
 import com.ugisozols.noteapp.utitilies.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor(
 ): ViewModel() {
 
 
-    private val _email = MutableLiveData<String>("")
+    private val _email = MutableLiveData("")
     val email : LiveData<String> = _email
 
     fun onEmailChange(newEmail : String){
@@ -33,7 +33,7 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    private val _password = MutableLiveData<String>("")
+    private val _password = MutableLiveData("")
     val password : LiveData<String> = _password
 
     fun onPasswordChange(newPassword: String){
@@ -57,6 +57,10 @@ class LoginViewModel @Inject constructor(
             _login.postValue(repository.login(email, password))
         }
     }
+    val loggedInEmail = sharedPreferences.getString(KEY_EMAIL, NO_EMAIL)
+    val loggedInPassword = sharedPreferences.getString(KEY_PASSWORD, NO_PASSWORD)
+
+
 
     fun setSharedPreferencesEmailAndPassword(email: String, password: String){
         sharedPreferences.edit().putString(KEY_EMAIL,email).apply()
