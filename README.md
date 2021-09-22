@@ -42,3 +42,10 @@
 
 Note app. This application allows you to store your daily notes. Every new entry is saved in local database and further that note is sent to backend server, 
 where it is stored. Thanks to server you can access any note from any device, using your profile. 
+
+This app :
+*  Have its own server - * [NoteAppServer](https://github.com/OzolsUgis/NoteData.git)
+*  Encrypts your password using Hash and Salt
+*  Make sure, when you log in for the first time, it saves your credentials, so when you restart app it automaticly authenticates you. 
+*  You can add/edit notes to local database, and then they will be saved in server.
+
