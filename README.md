@@ -44,8 +44,31 @@ Note app. This application allows you to store your daily notes. Every new entry
 where it is stored. Thanks to server you can access any note from any device, using your profile. 
 
 This app :
-*  Have its own server - * [NoteAppServer](https://github.com/OzolsUgis/NoteData.git)
+*  Have its own server - [NoteAppServer](https://github.com/OzolsUgis/NoteData.git)
 *  Encrypts your password using Hash and Salt
 *  Make sure, when you log in for the first time, it saves your credentials, so when you restart app it automaticly authenticates you. 
 *  You can add/edit notes to local database, and then they will be saved in server.
+
+### Built With 
+
+This application is built in  [Android Studio version 2020.3.1 (Artic Fox)](https://developer.android.com/studio?gclid=CjwKCAjwgb6IBhAREiwAgMYKRlU8WsxaTu6kg3JANeH6rEr8MrWyit5JaDfcTy0v1tTP0-DOmL1QnRoCxrcQAvD_BwE&gclsrc=aw.ds) 
+using :
+
+* [Kotlin](https://developer.android.com/kotlin)
+* [Jetpack Compose version 1.0.0](https://developer.android.com/jetpack/compose?gclid=EAIaIQobChMImIyxhI-i8gIVlgCiAx3kZgYlEAAYASAAEgL1J_D_BwE&gclsrc=aw.ds)
+* [Courotines](https://developer.android.com/kotlin/coroutines?gclid=EAIaIQobChMIqZC4jo-i8gIVsAZ7Ch1rOASzEAAYASAAEgKAwvD_BwE&gclsrc=aw.ds)
+* [DaggerHilt](https://developer.android.com/training/dependency-injection/hilt-android)
+* [Retrofit & OkHttp](https://square.github.io/retrofit/)
+* [Timber](https://github.com/JakeWharton/timber)
+* [Room](https://developer.android.com/training/data-storage/room)
+* [Shared Preferences](https://developer.android.com/training/data-storage/shared-preferences)
+* [Live Data](https://developer.android.com/topic/libraries/architecture/livedata)
+* [MVVM](https://developer.android.com/jetpack/guide?gclid=Cj0KCQjwqKuKBhCxARIsACf4XuFNj_xo4rFTlejHioYGxtm43lpLkUWaz5qwLyU1kyGXmO82-w6bZY4aAn-lEALw_wcB&gclsrc=aw.ds)
+
+For Backend [NoteAppServer](https://github.com/OzolsUgis/NoteData.git) : 
+
+* [Ktor](https://ktor.io/)
+* [MongoDB](https://www.mongodb.com/cloud/atlas/lp/try2?utm_source=google&utm_campaign=gs_footprint_row_search_core_brand_atlas_desktop&utm_term=mongodb&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=12212624584&gclid=Cj0KCQjwqKuKBhCxARIsACf4XuHnZLwMpGlVEMK6aKnUeCRLZhzG9S2jNUJwbTMP0Rtl55KA5sbe_MAaAoJ9EALw_wcB)
+* [Courotines](https://developer.android.com/kotlin/coroutines?gclid=EAIaIQobChMIqZC4jo-i8gIVsAZ7Ch1rOASzEAAYASAAEgKAwvD_BwE&gclsrc=aw.ds)
+* [Commons Codec](https://github.com/apache/commons-codec)
 
