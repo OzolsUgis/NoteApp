@@ -72,3 +72,28 @@ For Backend [NoteAppServer](https://github.com/OzolsUgis/NoteData.git) :
 * [Courotines](https://developer.android.com/kotlin/coroutines?gclid=EAIaIQobChMIqZC4jo-i8gIVsAZ7Ch1rOASzEAAYASAAEgKAwvD_BwE&gclsrc=aw.ds)
 * [Commons Codec](https://github.com/apache/commons-codec)
 
+## Getting Started
+### Prerequisites 
+
+1. You need to install Android Studio version 2020.3.1 (Artic Fox) or newer version who supports Jetpack compose
+you can find installation step-by-step in following : 
+
+* [Android Studio version 2020.3.1 (Artic Fox)](https://developer.android.com/studio?gclid=CjwKCAjwgb6IBhAREiwAgMYKRlU8WsxaTu6kg3JANeH6rEr8MrWyit5JaDfcTy0v1tTP0-DOmL1QnRoCxrcQAvD_BwE&gclsrc=aw.ds) 
+
+2. You need to install IntelliJ IDEA Version: 2021.2.2, you can download it here : 
+
+* [IntelliJ IDEA](https://www.jetbrains.com/idea/download/#section=windows)
+
+### Installation 
+1. You need to clone Backend server, you can fing step-by-step here - [NoteAppServer](https://github.com/OzolsUgis/NoteData.git)
+
+2. Clone the repository using : 
+
+* Android studio **file -> New -> Project from version control...** And enter this https://github.com/OzolsUgis/NoteApp.git in URL
+
+* Using terminal 
+  ```sh
+   git clone https://github.com/OzolsUgis/NoteApp.git
+   ```
+!!! Check if your Port from backend server is the same as it is in utilities -> Constants -> BASE_URL
+
