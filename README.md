@@ -20,18 +20,6 @@
         </ul>
     </li> 
     <li>
-      <a href='#usage'>Usage</a>
-         <ul>
-          <li><a href="#changing-language-and-units">Changing language and units</a></li>
-        </ul> 
-       <ul>
-          <li><a href="#specify-your-own-background-colors">Specyfy your own wather background colors</a></li>
-        </ul> 
-        <ul>
-          <li><a href="#add-new-data-blocks">Add new data blocks</a></li>
-        </ul>
-    </li>
-    <li>
       <a href='#contacts'>Contacts</a> 
     </li>
   </ol>
@@ -97,3 +85,9 @@ you can find installation step-by-step in following :
    ```
 !!! Check if your Port from backend server is the same as it is in utilities -> Constants -> BASE_URL
 
+## Contacts
+
+Ugis Ozols - (This will follow)
+
+Project Link (NoteApp)- https://github.com/OzolsUgis/NoteApp.git
+Project Link (NoteData) - https://github.com/OzolsUgis/NoteData.git
