@@ -37,6 +37,8 @@
   </ol>
 </details>
   
-  
+## About Project
 ![product-screenshot](https://live.staticflickr.com/65535/51503525721_db06f20a41_k.jpg)
 
+Note app. This application allows you to store your daily notes. Every new entry is saved in local database and further that note is sent to backend server, 
+where it is stored. Thanks to server you can access any note from any device, using your profile. 
