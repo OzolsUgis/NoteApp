@@ -87,7 +87,8 @@ you can find installation step-by-step in following :
 
 ## Contacts
 
-Ugis Ozols - (This will follow)
+Ugis Ozols - https://www.linkedin.com/in/ozols-ugis/
 
 Project Link (NoteApp)- https://github.com/OzolsUgis/NoteApp.git
+
 Project Link (NoteData) - https://github.com/OzolsUgis/NoteData.git
